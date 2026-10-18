@@ -1,90 +1,295 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gaming Hall Manager</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZA Game Hall</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#0c0b12;--panel:#171521;--panel2:#201b30;--line:#373047;--text:#f7f4ff;--muted:#aaa3bb;--purple:#a78bfa;--green:#55d6a0;--orange:#ffbf69;--red:#ff737d}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Tahoma,Arial,sans-serif}
-header{position:sticky;top:0;z-index:2;background:#11101aee;border-bottom:1px solid var(--line);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;backdrop-filter:blur(12px)}
-.brand{font-weight:800;font-size:18px}.brand span{color:var(--purple)}.sub{font-size:12px;color:var(--muted);margin-top:4px}
-button,select,input{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:10px;padding:10px 12px}button.primary{background:var(--purple);color:#171020;border:0;font-weight:800}button.danger{color:#ffc2c5;border-color:#71343b}button:disabled{opacity:.45;cursor:not-allowed}
-main{max-width:1250px;margin:auto;padding:20px 16px 40px}.notice{border:1px solid #59467b;background:#1d1730;border-radius:12px;padding:12px 14px;color:#d8c9ff;font-size:13px;line-height:1.8;margin-bottom:16px}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px}.stat label{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:25px;margin-top:8px}.stat small{color:var(--muted)}
-.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:24px 0 12px}.filters{display:flex;gap:8px;flex-wrap:wrap}.filters button.active{border-color:var(--purple);background:#33274b}
-h2{font-size:18px;margin:0}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.resource{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px;min-width:0}.resource.busy{border-color:#715a9f}.resource.warning{border-color:#8c642f}.rhead{display:flex;justify-content:space-between;gap:8px;align-items:center}.rname{font-weight:800}.kind{font-size:11px;color:var(--muted);margin-top:4px}.pill{font-size:11px;border-radius:30px;padding:5px 8px;background:#272331;color:var(--muted);white-space:nowrap}.pill.free{background:#163b2d;color:#8cf0bf}.pill.busy{background:#33264b;color:#dbcaff}.pill.warning{background:#49351d;color:#ffd59a}.timer{font-size:24px;font-weight:800;letter-spacing:.5px;margin:16px 0 5px;font-variant-numeric:tabular-nums}.detail{font-size:12px;color:var(--muted);line-height:1.8;min-height:42px}.actions{display:flex;gap:7px;margin-top:10px}.actions button{flex:1;padding:9px 6px;font-size:12px}.empty{font-size:13px;color:var(--muted);padding:24px;text-align:center}
-.modalback{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:16px;z-index:5}.modalback.show{display:flex}.modal{width:min(440px,100%);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}.modal h3{margin:0 0 14px}.field{display:block;margin:12px 0}.field span{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#100e18;color:var(--text)}.modalfoot{display:flex;gap:8px;margin-top:16px}.modalfoot button{flex:1}
-.section{margin-top:28px}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:520px;font-size:13px}th,td{text-align:right;padding:11px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}
-footer{color:var(--muted);font-size:11px;text-align:center;padding:25px}
-@media(max-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){header{padding:12px}.brand{font-size:15px}main{padding:14px 10px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.resource{padding:10px}.rname{font-size:13px}.timer{font-size:20px}.actions{flex-direction:column}.actions button{width:100%}.stat strong{font-size:22px}}
+:root{--bg:#0c0b12;--panel:#171521;--line:#373047;--text:#f7f4ff;--muted:#aaa3bb;--purple:#a78bfa;--green:#55d6a0;--red:#ff737d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+header{padding:16px;background:#11101a;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{font-size:20px;font-weight:bold}.brand span{color:var(--purple)}
+main{max-width:1100px;margin:auto;padding:18px 12px}
+.panel,.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+h2{font-size:18px;margin-top:0}
+input,button{font:inherit;border-radius:9px;padding:12px;width:100%;margin-top:8px}
+input{background:#100e18;color:white;border:1px solid var(--line)}
+button{background:#29223a;color:white;border:1px solid var(--line);cursor:pointer}
+button.primary{background:var(--purple);color:#171020;font-weight:bold;border:0}
+button.end{color:#ffc2c5;border-color:#71343b}
+button:disabled{opacity:.5}
+#login{max-width:440px;margin:35px auto}
+.hidden{display:none!important}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}
+.filters button{width:auto;margin:0;padding:9px 12px}
+.filters button.active{background:var(--purple);color:#171020}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.stat{background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:12px}
+.stat small{color:var(--muted)}.stat strong{display:block;font-size:24px;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.card h3{margin:0 0 12px;font-size:16px}
+.pill{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;background:#163b2d;color:#8cf0bf}
+.pill.busy{background:#33264b;color:#dbcaff}
+.detail{color:var(--muted);font-size:13px;line-height:1.9;margin-top:12px;overflow-wrap:anywhere}
+.muted{color:var(--muted);font-size:13px;line-height:1.8}
+#message{margin-top:12px;font-size:13px;line-height:1.8;overflow-wrap:anywhere}
+.error{color:#ff929a}.success{color:var(--green)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+@media(max-width:650px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat{padding:10px}.stat strong{font-size:20px}.brand{font-size:16px}}
+@media(max-width:390px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header><div><div class="brand"><span>GH</span> Gaming Hall Manager</div><div class="sub">نظام إدارة القاعة — نموذج أولي</div></div><button id="staffBtn">الموظف: تجربة</button></header>
+<header>
+  <div>
+    <div class="brand"><span>ZA</span> Game Hall</div>
+    <div class="muted">إدارة أجهزة القاعة</div>
+  </div>
+  <button id="logout" class="hidden" style="width:auto;margin:0">تسجيل خروج</button>
+</header>
+
 <main>
-<div class="notice">هذه نسخة تجريبية أولية لتجربة الواجهة والمؤقتات على هذا الجهاز. تسجيل الدخول الحقيقي ومزامنة الأجهزة المتعددة تحتاج ربط قاعدة بيانات آمنة قبل استخدامها في القاعة.</div>
-<div class="stats">
-<div class="stat"><label>إجمالي مواقع اللعب</label><strong id="total">25</strong><small>PC + PlayStation + بليارد + VIP</small></div>
-<div class="stat"><label>مشغول الآن</label><strong id="busyCount">0</strong><small>جلسات نشطة</small></div>
-<div class="stat"><label>متاح</label><strong id="freeCount">25</strong><small>جاهز لاستقبال الزبائن</small></div>
-<div class="stat"><label>إيراد الجلسات المسجلة</label><strong id="income">0 د.ع</strong><small>منذ فتح هذه الصفحة</small></div>
-</div>
-<div class="toolbar"><h2>الأجهزة والطاولات</h2><div class="filters" id="filters"><button class="active" data-filter="الكل">الكل</button><button data-filter="PC">PC</button><button data-filter="PlayStation">PlayStation</button><button data-filter="بليارد">بليارد</button><button data-filter="VIP">VIP</button></div></div>
-<div class="grid" id="resources"></div>
-<div class="section panel"><div class="sectionhead"><h2>آخر الجلسات المنتهية</h2><button id="clearLog">مسح السجل التجريبي</button></div><div class="tablewrap"><table><thead><tr><th>الموقع</th><th>الموظف</th><th>المدة</th><th>المبلغ</th><th>وقت الإنهاء</th></tr></thead><tbody id="log"><tr><td colspan="5" class="empty">ماكو جلسات منتهية بعد</td></tr></tbody></table></div></div>
-</main><footer>واجهة تجريبية فقط — لا تستخدمها بعد كدفتر حسابات رسمي أو كنظام مشترك بين الأجهزة.</footer>
-<div class="modalback" id="modal"><div class="modal"><h3 id="modalTitle">بدء جلسة</h3><div id="modalBody"></div><div class="modalfoot"><button id="cancel">إلغاء</button><button class="primary" id="confirm">بدء الجلسة</button></div></div></div>
+  <section id="login" class="panel">
+    <h2>تسجيل دخول الموظف</h2>
+    <p class="muted">سجّل الدخول بالحساب الذي أنشأه مسؤول القاعة.</p>
+    <form id="loginForm">
+      <label for="email">الإيميل</label>
+      <input id="email" type="email" autocomplete="username" required>
+      <label for="password">كلمة المرور</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <button id="loginBtn" class="primary" type="submit">دخول</button>
+    </form>
+    <div id="loginMessage" class="muted"></div>
+  </section>
+
+  <section id="app" class="hidden">
+    <div class="stats">
+      <div class="stat"><small>كل المواقع</small><strong id="total">0</strong></div>
+      <div class="stat"><small>مشغول</small><strong id="busy">0</strong></div>
+      <div class="stat"><small>متاح</small><strong id="free">0</strong></div>
+    </div>
+    <h2>الأجهزة والطاولات</h2>
+    <p class="muted">حالة الأجهزة تتحدث تلقائياً كل عدة ثوانٍ.</p>
+    <div class="filters" id="filters">
+      <button class="active" data-filter="الكل">الكل</button>
+      <button data-filter="PC">PC</button>
+      <button data-filter="PlayStation">PlayStation</button>
+      <button data-filter="بليارد">بليارد</button>
+      <button data-filter="VIP">VIP</button>
+    </div>
+    <div id="resources" class="grid"></div>
+    <div id="message" role="status"></div>
+  </section>
+</main>
+<footer>ZA Game Hall — نظام إدارة القاعة</footer>
+
 <script>
-const types=[["PC",10],["PlayStation",10],["بليارد",3],["VIP",2]];
-let items=[],logs=[],filter="الكل",selected=null,employee="تجربة";
-types.forEach(([type,n])=>{for(let i=1;i<=n;i++)items.push({id:type+"-"+i,type,name:type+" "+i,active:false,end:0,start:0,minutes:0,customer:"",rate:0,owner:""})});
-const $=id=>document.getElementById(id);
-const fmt=n=>{n=Math.max(0,Math.floor(n));return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")};
-const money=n=>Math.round(n).toLocaleString("en-US")+" د.ع";
-function render(){
- let busy=items.filter(x=>x.active).length;
- $("total").textContent=items.length;$("busyCount").textContent=busy;$("freeCount").textContent=items.length-busy;
- $("income").textContent=money(logs.reduce((s,x)=>s+x.amount,0));
- const list=items.filter(x=>filter==="الكل"||x.type===filter);
- $("resources").innerHTML=list.map(x=>{
-  let left=Math.ceil((x.end-Date.now())/1000),warning=x.active&&left<=300;
-  return `<article class="resource ${x.active?"busy":""} ${warning?"warning":""}">
-  <div class="rhead"><div><div class="rname">${x.name}</div><div class="kind">${x.type==="VIP"?"غرفة خاصة":"موقع لعب"}</div></div><span class="pill ${!x.active?"free":warning?"warning":"busy"}">${!x.active?"متاح":warning?"قارب ينتهي":"مشغول"}</span></div>
-  <div class="timer">${x.active?fmt(left):"--:--"}</div>
-  <div class="detail">${x.active?`الزبون: ${escapeHtml(x.customer||"غير محدد")}<br>الموظف: ${escapeHtml(x.owner)}<br>الأجرة المقدرة: ${money((Date.now()-x.start)/3600000*x.rate)}`:"جاهز لبدء جلسة جديدة"}</div>
-  <div class="actions">${x.active?`<button onclick="extendSession('${x.id}')">تمديد 30 د</button><button class="danger" onclick="endSession('${x.id}')">إنهاء</button>`:`<button class="primary" onclick="openStart('${x.id}')">بدء جلسة</button>`}</div></article>`;
- }).join("");
- $("log").innerHTML=logs.length?logs.slice().reverse().map(x=>`<tr><td>${escapeHtml(x.name)}</td><td>${escapeHtml(x.owner)}</td><td>${x.minutes} دقيقة</td><td>${money(x.amount)}</td><td>${x.ended}</td></tr>`).join(""):`<tr><td colspan="5" class="empty">ماكو جلسات منتهية بعد</td></tr>`;
- items.filter(x=>x.active&&x.end>Date.now()&&x.end-Date.now()<=300000&&x.end-Date.now()>295000).forEach(x=>notify(`${x.name}: باقي 5 دقائق`));
- items.filter(x=>x.active&&x.end<=Date.now()&&x.end>Date.now()-5000).forEach(x=>notify(`${x.name}: انتهى الوقت`));
+/* استبدل النص أدناه بمفتاح Publishable من مشروعك */
+const SUPABASE_URL = 'https://kgwojfxzdmhynsxtekho.supabase.co';
+const SUPABASE_KEY = 'PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE';
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+let devices = [];
+let filter = 'الكل';
+let currentUser = null;
+let busyAction = false;
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[c]));
 }
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function notify(msg){if("Notification"in window&&Notification.permission==="granted")new Notification("تنبيه القاعة",{body:msg});else console.log(msg)}
-function openStart(id){
- selected=items.find(x=>x.id===id);
- $("modalTitle").textContent="بدء جلسة — "+selected.name;
- $("modalBody").innerHTML=`<label class="field"><span>اسم الزبون (اختياري)</span><input id="customer" placeholder="اسم الزبون"></label>
- <label class="field"><span>مدة الجلسة</span><select id="duration"><option value="30">30 دقيقة</option><option value="60" selected>ساعة واحدة</option><option value="90">ساعة ونصف</option><option value="120">ساعتان</option><option value="custom">مدة مخصصة بالدقائق</option></select></label>
- <label class="field" id="customWrap" style="display:none"><span>المدة بالدقائق</span><input id="customMinutes" type="number" min="1" value="45"></label>
- <label class="field"><span>السعر لكل ساعة (دينار عراقي)</span><input id="rate" type="number" min="0" value="${selected.type==="VIP"?10000:selected.type==="بليارد"?5000:3000}"></label>`;
- $("modal").classList.add("show");
- $("duration").onchange=()=>{$("customWrap").style.display=$("duration").value==="custom"?"block":"none"};
- $("confirm").onclick=()=>{
-  let d=$("duration").value==="custom"?Number($("customMinutes").value):Number($("duration").value),rate=Number($("rate").value);
-  if(!d||d<1||rate<0){alert("تأكد من المدة والسعر");return}
-  selected.active=true;selected.start=Date.now();selected.end=Date.now()+d*60000;selected.minutes=d;selected.rate=rate;selected.customer=$("customer").value.trim();selected.owner=employee;
-  $("modal").classList.remove("show");render();
- };
+
+function showMessage(text, error=false) {
+  $('message').textContent = text;
+  $('message').className = error ? 'error' : 'success';
 }
-function extendSession(id){let x=items.find(a=>a.id===id);x.end=Math.max(Date.now(),x.end)+30*60000;x.minutes+=30;render()}
-function endSession(id){let x=items.find(a=>a.id===id);let elapsed=Math.max(1,Math.ceil((Date.now()-x.start)/60000));logs.push({name:x.name,owner:x.owner,minutes:elapsed,amount:Math.round(elapsed/60*x.rate),ended:new Date().toLocaleTimeString("ar-IQ",{hour:"2-digit",minute:"2-digit"})});x.active=false;x.end=0;x.start=0;x.minutes=0;x.customer="";render()}
-$("filters").addEventListener("click",e=>{let b=e.target.closest("button[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("active",x===b));render()});
-$("cancel").onclick=()=>$("modal").classList.remove("show");
-$("clearLog").onclick=()=>{if(confirm("تمسح السجل التجريبي؟")){logs=[];render()}};
-$("staffBtn").onclick=()=>{let n=prompt("اكتب اسم الموظف لهذه الجلسة التجريبية:",employee);if(n&&n.trim()){employee=n.trim();$("staffBtn").textContent="الموظف: "+employee}};
-if("Notification"in window&&Notification.permission==="default"){setTimeout(()=>{try{Notification.requestPermission()}catch(e){}},1200)}
-setInterval(render,1000);render();
+
+function category(device) {
+  const value = String(device.device_type || device.type || device.name || '').toLowerCase();
+  if (value.includes('playstation') || value.includes('بلاي')) return 'PlayStation';
+  if (value.includes('بليارد') || value.includes('billiard')) return 'بليارد';
+  if (value.includes('vip')) return 'VIP';
+  if (value.includes('pc') || value.includes('كمبيوتر')) return 'PC';
+  return device.device_type || 'أخرى';
+}
+
+function isBusy(device) {
+  return String(device.status || '').toLowerCase() !== 'available';
+}
+
+function formatTime(value) {
+  if (!value) return 'غير مسجل';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'غير مسجل';
+  return date.toLocaleString('ar-IQ', {
+    year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit'
+  });
+}
+
+function render() {
+  const busy = devices.filter(isBusy).length;
+  $('total').textContent = devices.length;
+  $('busy').textContent = busy;
+  $('free').textContent = devices.length - busy;
+
+  const shown = devices.filter(d => filter === 'الكل' || category(d) === filter);
+  if (!shown.length) {
+    $('resources').innerHTML =
+      '<div class="panel muted">ماكو أجهزة بهذا القسم بقاعدة البيانات حالياً.</div>';
+    return;
+  }
+
+  $('resources').innerHTML = shown.map(d => {
+    const active = isBusy(d);
+    const name = d.name || (category(d) + ' ' + (d.device_number ?? d.id));
+    return `<article class="card">
+      <h3>${escapeHtml(name)}</h3>
+      <span class="pill ${active ? 'busy' : ''}">${active ? 'مشغول' : 'متاح'}</span>
+      <div class="detail">
+        وقت البداية: ${escapeHtml(formatTime(d.session_started_at))}<br>
+        وقت النهاية: ${escapeHtml(formatTime(d.session_ended_at))}
+      </div>
+      ${active
+        ? `<button class="end" data-action="end" data-id="${escapeHtml(d.id)}" ${busyAction?'disabled':''}>إنهاء الجلسة</button>`
+        : `<button class="primary" data-action="start" data-id="${escapeHtml(d.id)}" ${busyAction?'disabled':''}>بدء الجلسة</button>`
+      }
+    </article>`;
+  }).join('');
+}
+
+async function loadDevices() {
+  if (!currentUser) return;
+  const { data, error } = await db
+    .from('devices')
+    .select('*')
+    .order('name', { ascending: true });
+
+  if (error) {
+    showMessage('تعذّر تحميل الأجهزة: ' + error.message, true);
+    return;
+  }
+  devices = data || [];
+  render();
+}
+
+async function setSession(id, start) {
+  if (!currentUser || busyAction) return;
+  const device = devices.find(d => String(d.id) === String(id));
+  if (!device) return;
+
+  if (start && isBusy(device)) {
+    showMessage('هذا الجهاز مشغول بالفعل.', true);
+    return;
+  }
+  if (!start && !isBusy(device)) {
+    showMessage('هذا الجهاز متاح بالفعل.', true);
+    return;
+  }
+
+  const now = new Date().toISOString();
+  const changes = start
+    ? { status:'busy', session_started_at:now, session_ended_at:null }
+    : { status:'available', session_ended_at:now };
+
+  busyAction = true;
+  render();
+  showMessage('جارٍ حفظ التغيير...');
+
+  const { error } = await db.from('devices').update(changes).eq('id', device.id);
+
+  busyAction = false;
+  if (error) {
+    showMessage('لم يُحفظ التغيير: ' + error.message, true);
+    await loadDevices();
+    return;
+  }
+
+  showMessage(start ? 'تم تسجيل بداية الجلسة.' : 'تم إنهاء الجلسة وإتاحة الجهاز.');
+  await loadDevices();
+}
+
+$('resources').addEventListener('click', async event => {
+  const button = event.target.closest('button[data-action]');
+  if (!button) return;
+  await setSession(button.dataset.id, button.dataset.action === 'start');
+});
+
+$('filters').addEventListener('click', event => {
+  const button = event.target.closest('button[data-filter]');
+  if (!button) return;
+  filter = button.dataset.filter;
+  document.querySelectorAll('#filters button').forEach(b =>
+    b.classList.toggle('active', b === button)
+  );
+  render();
+});
+
+function showApp(user) {
+  currentUser = user || null;
+  $('login').classList.toggle('hidden', !!user);
+  $('app').classList.toggle('hidden', !user);
+  $('logout').classList.toggle('hidden', !user);
+  if (user) {
+    $('loginMessage').textContent = '';
+    loadDevices();
+  } else {
+    devices = [];
+    $('resources').innerHTML = '';
+  }
+}
+
+$('loginForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  $('loginBtn').disabled = true;
+  $('loginMessage').textContent = 'جارٍ تسجيل الدخول...';
+
+  const { data, error } = await db.auth.signInWithPassword({
+    email: $('email').value.trim(),
+    password: $('password').value
+  });
+
+  $('loginBtn').disabled = false;
+  if (error) {
+    $('loginMessage').textContent = 'تعذّر الدخول. تأكد من الإيميل وكلمة المرور وأن حساب الموظف موجود.';
+    return;
+  }
+  showApp(data.user);
+});
+
+$('logout').addEventListener('click', async () => {
+  await db.auth.signOut();
+  showApp(null);
+});
+
+db.auth.onAuthStateChange((_event, session) => {
+  showApp(session?.user || null);
+});
+
+async function init() {
+  if (!SUPABASE_KEY.startsWith('sb_publishable_') ||
+      SUPABASE_KEY === 'PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE') {
+    $('loginMessage').textContent = 'أضف مفتاح Publishable الخاص بمشروعك في موضعه داخل الكود.';
+    return;
+  }
+  const { data, error } = await db.auth.getSession();
+  if (error) {
+    $('loginMessage').textContent = 'تعذّر التحقق من الجلسة. راجع إعدادات Supabase.';
+    return;
+  }
+  showApp(data.session?.user || null);
+}
+
+setInterval(() => {
+  if (currentUser && !busyAction) loadDevices();
+}, 10000);
+
+init();
 </script>
-</body></html>
+</body>
+</html>
